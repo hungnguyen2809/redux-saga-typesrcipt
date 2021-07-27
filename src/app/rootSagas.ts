@@ -1,6 +1,6 @@
-import { all } from 'redux-saga/effects';
+import { all, call } from 'redux-saga/effects';
 import counterSaga from 'features/counter/counterSaga';
 
 export default function* rootSagas() {
-  yield all([counterSaga()]);
+  yield all([call(counterSaga)]);
 }
