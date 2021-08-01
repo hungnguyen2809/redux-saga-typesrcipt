@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AdminLayout = (): JSX.Element => {
+const DefaultLayout = (): JSX.Element => {
   const styles = useStyles();
   const routes = useRoutes();
 
@@ -44,3 +44,4 @@ export const AdminLayout = (): JSX.Element => {
     </Box>
   );
 };
+export default DefaultLayout;
