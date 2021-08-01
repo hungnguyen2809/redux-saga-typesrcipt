@@ -1,4 +1,6 @@
-import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Button, CircularProgress, makeStyles, Paper, Typography } from '@material-ui/core';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { authActions, isLoggingSelector } from 'redux/auth/slice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +17,18 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = (): JSX.Element => {
   const styles = useStyles();
+  const dispatch = useAppDispatch();
+  const isLogging = useAppSelector(isLoggingSelector);
+
+  const handleLogin = () => {
+    dispatch(authActions.action_Login({ username: 'hungnv', password: 'hungnv' }));
+    // dispatch(
+    //   authActions.action_Login_Other({
+    //     data: { username: 'hungnv', password: 'hungnv' },
+    //     callbacks: { onSuccess: (res: any) => {}, onError: () => {} },
+    //   })
+    // );
+  };
 
   return (
     <div className={styles.root}>
@@ -23,7 +37,10 @@ const LoginPage = (): JSX.Element => {
           Student Management
         </Typography>
         <Box marginTop={4}>
-          <Button fullWidth variant={'contained'} color={'primary'}>
+          <Button fullWidth variant={'contained'} color={'primary'} onClick={handleLogin}>
+            {isLogging && (
+              <CircularProgress size={20} color={'secondary'} style={{ marginRight: 10 }} />
+            )}{' '}
             Login App
           </Button>
         </Box>

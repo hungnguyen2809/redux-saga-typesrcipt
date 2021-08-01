@@ -2,6 +2,14 @@ interface BaseResponse {
   status: number;
 }
 
+export interface AppPayload<D = any, S = any, E = any> {
+  data: D;
+  callbacks?: {
+    onSuccess?: (res: S) => void;
+    onError?: (error: E) => void;
+  };
+}
+
 interface PaginationParams {
   _limit: number;
   _page: number;
