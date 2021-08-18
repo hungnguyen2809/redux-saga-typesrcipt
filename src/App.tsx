@@ -1,13 +1,14 @@
 import React from 'react';
 import { NotFound, PrivateRoute } from 'components/common';
 import { Route, Switch } from 'react-router-dom';
+import { LinearProgress } from '@material-ui/core';
 
 const LoginPage = React.lazy(() => import('features/auth/pages/LoginPage'));
 const DefaultLayout = React.lazy(() => import('components/layouts/DefaultLayout'));
 
 function App() {
   return (
-    <React.Suspense fallback={<p>Loading</p>}>
+    <React.Suspense fallback={<LinearProgress />}>
       <Switch>
         {/* Có exact nó chỉ đúng với path như vậy nếu vào các route con nó không math lại được */}
         {/* VD: login thì chỉ là login, nếu mà login/abc thì nó không match được */}
