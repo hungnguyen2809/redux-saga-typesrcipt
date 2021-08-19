@@ -3,6 +3,7 @@ import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import authReducer from 'redux/auth/slice';
 import dashboardReducer from 'redux/dashboard/slice';
+import studentReducer from 'redux/student/slice';
 import counterReducer from '../features/counter/counterSlice';
 
 const createRootReducers = (history: History) => {
@@ -11,6 +12,7 @@ const createRootReducers = (history: History) => {
     counter: counterReducer,
     auth: authReducer,
     dashboard: dashboardReducer,
+    student: studentReducer,
   });
 };
 

@@ -1,5 +1,6 @@
 import { Box, Button, CircularProgress, makeStyles, Paper, Typography } from '@material-ui/core';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { Redirect } from 'react-router-dom';
 import { authActions, isLoggingSelector } from 'redux/auth/slice';
 
 const useStyles = makeStyles((theme) => ({
@@ -14,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
+
+const isLogin = () => {
+  return localStorage.getItem('access_token');
+};
 
 const LoginPage = (): JSX.Element => {
   const styles = useStyles();
@@ -30,7 +35,9 @@ const LoginPage = (): JSX.Element => {
     // );
   };
 
-  return (
+  return isLogin() ? (
+    <Redirect to="/admin/dashboard" />
+  ) : (
     <div className={styles.root}>
       <Paper elevation={1} className={styles.box}>
         <Typography variant={'h5'} component={'h1'}>

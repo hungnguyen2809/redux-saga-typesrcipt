@@ -2,7 +2,7 @@ interface BaseResponse {
   status: number;
 }
 
-interface PaginationParams {
+export interface PaginationParams {
   _limit: number;
   _page: number;
   _totalRows: number;
