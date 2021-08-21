@@ -5,8 +5,8 @@ import { ListParams, ListResponse, PaginationParams, Student } from 'models';
 interface IStudentState {
   loading: boolean;
   list: Student[];
-  filter?: ListParams;
-  pagination?: PaginationParams;
+  filter: ListParams;
+  pagination: PaginationParams;
 }
 
 const initialState: IStudentState = {
@@ -42,6 +42,7 @@ const studentSilce = createSlice({
     setFilter(state, action: PayloadAction<ListParams>) {
       state.filter = action.payload;
     },
+    setFilterWithDebounce(state, action: PayloadAction<ListParams>) {},
   },
 });
 
@@ -49,12 +50,10 @@ const studentSilce = createSlice({
 export const studentActions = studentSilce.actions;
 
 //Selectors
-export const studentSelectors = {
-  loading: (state: RootState) => state.student.loading,
-  listStudent: (state: RootState) => state.student.list,
-  filter: (state: RootState) => state.student.filter,
-  pagination: (state: RootState) => state.student.pagination,
-};
+export const selectStudentLoading = (state: RootState) => state.student.loading;
+export const selectStudentList = (state: RootState) => state.student.list;
+export const selectStudentFilter = (state: RootState) => state.student.filter;
+export const selectStudentPagination = (state: RootState) => state.student.pagination;
 
 //Reducers
 const studentReducer = studentSilce.reducer;

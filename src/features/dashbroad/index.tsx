@@ -2,7 +2,14 @@ import { Box, Grid, LinearProgress, makeStyles, Typography } from '@material-ui/
 import { PeopleAlt } from '@material-ui/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useEffect } from 'react';
-import { dashboardActions, dashboardSelectors } from 'redux/dashboard/slice';
+import {
+  dashboardActions,
+  selectDashboardHighestStudents,
+  selectDashboardLoading,
+  selectDashboardLowestStudents,
+  selectDashboardRankByCitys,
+  selectDashboardStatistics,
+} from 'redux/dashboard/slice';
 import RankingStudents from './components/RankingStudents';
 import StatisticsItem from './components/StatisticItem';
 import Widget from './components/Widget';
@@ -27,11 +34,11 @@ function DashbroadPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
-  const loading = useAppSelector(dashboardSelectors.loadingDashboard);
-  const statistics = useAppSelector(dashboardSelectors.statisticsDashboard);
-  const highestStudents = useAppSelector(dashboardSelectors.highestStudentsDashboard);
-  const lowestStudents = useAppSelector(dashboardSelectors.lowestStudentsDashboard);
-  const rankingByCitys = useAppSelector(dashboardSelectors.rankByCitysDashboard);
+  const loading = useAppSelector(selectDashboardLoading);
+  const statistics = useAppSelector(selectDashboardStatistics);
+  const highestStudents = useAppSelector(selectDashboardHighestStudents);
+  const lowestStudents = useAppSelector(selectDashboardLowestStudents);
+  const rankingByCitys = useAppSelector(selectDashboardRankByCitys);
 
   useEffect(() => {
     dispatch(dashboardActions.fetchData());

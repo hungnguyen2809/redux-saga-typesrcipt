@@ -1,4 +1,4 @@
-import { Button, Paper } from '@material-ui/core';
+import { Box, Button, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,10 +6,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Student } from 'models';
+import { City, Student } from 'models';
+import { capitalizeString, getMarkNumber } from 'utils';
 
 interface Props {
   students: Student[];
+  cityMap: { [key: string]: City };
   onModify?: (student: Student) => void;
   onDelete?: (student: Student) => void;
 }
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   edit: { margin: theme.spacing(1) },
 }));
 
-function StudentTable({ students, onModify, onDelete }: Props): JSX.Element {
+function StudentTable({ students, cityMap, onModify, onDelete }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
@@ -39,16 +41,18 @@ function StudentTable({ students, onModify, onDelete }: Props): JSX.Element {
         <TableBody>
           {students.map((row, idx) => (
             <TableRow key={idx}>
-              <TableCell>{row.id}</TableCell>
+              <TableCell width={310}>{row.id}</TableCell>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.age}</TableCell>
-              <TableCell>{row.gender}</TableCell>
-              <TableCell>{row.mark}</TableCell>
-              <TableCell>{row.city}</TableCell>
+              <TableCell>{capitalizeString(row.gender)}</TableCell>
+              <TableCell>
+                <Box color={getMarkNumber(row.mark)}>{row.mark}</Box>
+              </TableCell>
+              <TableCell>{cityMap[row.city]?.name}</TableCell>
               <TableCell align="right">
                 <Button
+                  size={'small'}
                   className={classes.edit}
-                  variant={'contained'}
                   color={'primary'}
                   onClick={() => {
                     onModify && onModify(row);
@@ -57,7 +61,7 @@ function StudentTable({ students, onModify, onDelete }: Props): JSX.Element {
                   Modify
                 </Button>
                 <Button
-                  variant={'outlined'}
+                  size={'small'}
                   color={'secondary'}
                   onClick={() => {
                     onDelete?.(row);

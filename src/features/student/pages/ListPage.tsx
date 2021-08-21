@@ -1,13 +1,26 @@
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, LinearProgress, makeStyles, Typography } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import React, { ReactElement, useEffect } from 'react';
-import { studentActions, studentSelectors } from 'redux/student/slice';
+import { ListParams } from 'models';
+import React, { useEffect } from 'react';
+import { selectCityList, selectCityMap } from 'redux/city/slice';
+import {
+  selectStudentFilter,
+  selectStudentList,
+  selectStudentLoading,
+  selectStudentPagination,
+  studentActions,
+} from 'redux/student/slice';
+import StudentFilter from '../components/StudentFilter';
 import StudentTable from '../components/StudentTable';
 
 interface Props {}
 
 const useStyles = makeStyles((theme) => ({
-  container: {},
+  container: {
+    position: 'relative',
+    paddingTop: theme.spacing(1),
+  },
   titleContainter: {
     display: 'flex',
     flexFlow: 'row nowrap',
@@ -15,23 +28,51 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(3),
   },
+  loading: {
+    position: 'absolute',
+    top: theme.spacing(-1),
+    width: '100%',
+  },
 }));
 
-function ListPage(props: Props): ReactElement {
+function ListPage(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
-  const loading = useAppSelector(studentSelectors.loading);
-  const studentList = useAppSelector(studentSelectors.listStudent);
-  const filterList = useAppSelector(studentSelectors.filter);
-  const paginationList = useAppSelector(studentSelectors.pagination);
+  //selectors
+  const loading = useAppSelector(selectStudentLoading);
+  const studentList = useAppSelector(selectStudentList);
+  const filterList = useAppSelector(selectStudentFilter);
+  const paginationList = useAppSelector(selectStudentPagination);
+
+  const cityMap = useAppSelector(selectCityMap);
+  const cityList = useAppSelector(selectCityList);
 
   useEffect(() => {
-    dispatch(studentActions.fetchStudents({ _page: 1, _limit: 15 }));
-  }, [dispatch]);
+    dispatch(studentActions.fetchStudents(filterList));
+  }, [dispatch, filterList]);
+
+  const onChangePagination = (event: React.ChangeEvent<unknown>, page: number): void => {
+    dispatch(
+      studentActions.setFilter({
+        ...filterList,
+        _page: page,
+      })
+    );
+  };
+
+  const onSearchChange = (filter: ListParams): void => {
+    dispatch(studentActions.setFilterWithDebounce(filter));
+  };
+
+  const onFilterChange = (filter: ListParams): void => {
+    dispatch(studentActions.setFilter(filter));
+  };
 
   return (
     <Box className={classes.container}>
+      {loading ? <LinearProgress className={classes.loading} /> : null}
+
       <Box className={classes.titleContainter}>
         <Typography variant={'h5'}>Management</Typography>
         <Button variant={'contained'} color={'primary'}>
@@ -39,8 +80,25 @@ function ListPage(props: Props): ReactElement {
         </Button>
       </Box>
 
+      <Box mb={3}>
+        <StudentFilter
+          filter={filterList}
+          citys={cityList}
+          onSearchChange={onSearchChange}
+          onChange={onFilterChange}
+        />
+      </Box>
+
       {/* Student List */}
-      <StudentTable students={studentList} />
+      <StudentTable students={studentList} cityMap={cityMap} />
+      <Box mt={2} display="flex" justifyContent="center">
+        <Pagination
+          color={'primary'}
+          count={Math.ceil(paginationList._totalRows / paginationList._limit)}
+          page={paginationList._page}
+          onChange={onChangePagination}
+        />
+      </Box>
     </Box>
   );
 }
