@@ -1,7 +1,8 @@
 import { Box, Button, LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
+import apiStudent from 'api/apiStudent';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { ListParams } from 'models';
+import { ListParams, Student } from 'models';
 import React, { useEffect } from 'react';
 import { selectCityList, selectCityMap } from 'redux/city/slice';
 import {
@@ -69,6 +70,20 @@ function ListPage(props: Props): JSX.Element {
     dispatch(studentActions.setFilter(filter));
   };
 
+  const handleRemoveStudent = async (student: Student, cb: () => void): Promise<void> => {
+    try {
+      if (student.id) {
+        await apiStudent.remove(student.id);
+        //Trigger fetch list student with current filter
+        const newFilter = { ...filterList };
+        dispatch(studentActions.fetchStudents(newFilter));
+        cb();
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleRemoveStudent ~ error', error);
+    }
+  };
+
   return (
     <Box className={classes.container}>
       {loading ? <LinearProgress className={classes.loading} /> : null}
@@ -90,7 +105,7 @@ function ListPage(props: Props): JSX.Element {
       </Box>
 
       {/* Student List */}
-      <StudentTable students={studentList} cityMap={cityMap} />
+      <StudentTable students={studentList} cityMap={cityMap} onDelete={handleRemoveStudent} />
       <Box mt={2} display="flex" justifyContent="center">
         <Pagination
           color={'primary'}

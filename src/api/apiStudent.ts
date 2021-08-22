@@ -18,7 +18,7 @@ const apiStudent = {
     const url = '/students';
     return axiosClient.patch(url, data);
   },
-  remove(id: number): Promise<any> {
+  remove(id: string): Promise<any> {
     const url = `/students/${id}`;
     return axiosClient.delete(url);
   },
