@@ -4,6 +4,7 @@ import apiStudent from 'api/apiStudent';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { ListParams, Student } from 'models';
 import React, { useEffect } from 'react';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { selectCityList, selectCityMap } from 'redux/city/slice';
 import {
   selectStudentFilter,
@@ -38,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
 
 function ListPage(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
+  const math = useRouteMatch();
+  const history = useHistory();
   const classes = useStyles();
 
   //selectors
@@ -84,15 +87,21 @@ function ListPage(props: Props): JSX.Element {
     }
   };
 
+  const handleModifyStudent = (student: Student) => {
+    history.push(`${math.url}/${student.id}`);
+  };
+
   return (
     <Box className={classes.container}>
       {loading ? <LinearProgress className={classes.loading} /> : null}
 
       <Box className={classes.titleContainter}>
         <Typography variant={'h5'}>Management</Typography>
-        <Button variant={'contained'} color={'primary'}>
-          Add Student
-        </Button>
+        <Link to={`${math.url}/add`} style={{ textDecoration: 'none' }}>
+          <Button variant={'contained'} color={'primary'}>
+            Add Student
+          </Button>
+        </Link>
       </Box>
 
       <Box mb={3}>
@@ -105,7 +114,12 @@ function ListPage(props: Props): JSX.Element {
       </Box>
 
       {/* Student List */}
-      <StudentTable students={studentList} cityMap={cityMap} onDelete={handleRemoveStudent} />
+      <StudentTable
+        students={studentList}
+        cityMap={cityMap}
+        onDelete={handleRemoveStudent}
+        onModify={handleModifyStudent}
+      />
       <Box mt={2} display="flex" justifyContent="center">
         <Pagination
           color={'primary'}

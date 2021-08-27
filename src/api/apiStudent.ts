@@ -6,7 +6,7 @@ const apiStudent = {
     const url = '/students';
     return axiosClient.get(url, { params });
   },
-  find(id: number): Promise<Student> {
+  find(id: string): Promise<Student> {
     const url = `/students/${id}`;
     return axiosClient.get(url);
   },

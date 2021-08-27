@@ -49,7 +49,7 @@ function StudentTable({ students, cityMap, onModify, onDelete }: Props): JSX.Ele
   };
 
   return (
-    <>
+    <React.Fragment>
       <TableContainer component={Paper}>
         <Table className={classes.table} size={'small'} aria-label="simple table">
           <TableHead>
@@ -123,7 +123,7 @@ function StudentTable({ students, cityMap, onModify, onDelete }: Props): JSX.Ele
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </React.Fragment>
   );
 }
 
