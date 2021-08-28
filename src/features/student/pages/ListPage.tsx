@@ -2,6 +2,7 @@ import { Box, Button, LinearProgress, makeStyles, Typography } from '@material-u
 import { Pagination } from '@material-ui/lab';
 import apiStudent from 'api/apiStudent';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { toastError, toastSuccess } from 'components/common';
 import { ListParams, Student } from 'models';
 import React, { useEffect } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
@@ -81,9 +82,10 @@ function ListPage(props: Props): JSX.Element {
         const newFilter = { ...filterList };
         dispatch(studentActions.fetchStudents(newFilter));
         cb();
+        toastSuccess('Remove student success');
       }
     } catch (error) {
-      console.log('🚀 ~ handleRemoveStudent ~ error', error);
+      toastError(error.message);
     }
   };
 

@@ -14,8 +14,9 @@ const apiStudent = {
     const url = '/students';
     return axiosClient.post(url, data);
   },
-  update(data: Student): Promise<Student> {
-    const url = '/students';
+  update(data: Partial<Student>): Promise<Student> {
+    //Partial: một phần, chỉ cần truyền một phần của Student không cần truyền full
+    const url = `/students/${data.id}`;
     return axiosClient.patch(url, data);
   },
   remove(id: string): Promise<any> {

@@ -1,4 +1,5 @@
 import { CssBaseline } from '@material-ui/core';
+import { ToastifyContainer } from 'components/common';
 import { ConnectedRouter } from 'connected-react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,10 +13,11 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <CssBaseline />
       <ConnectedRouter history={history}>
-        <CssBaseline />
         <App />
       </ConnectedRouter>
+      <ToastifyContainer />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

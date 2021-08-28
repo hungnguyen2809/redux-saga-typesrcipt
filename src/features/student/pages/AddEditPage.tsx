@@ -1,9 +1,10 @@
 import { Box, Typography } from '@material-ui/core';
 import { ChevronLeft } from '@material-ui/icons';
 import apiStudent from 'api/apiStudent';
+import { toastSuccess } from 'components/common';
 import { Student } from 'models';
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import StudentForm from '../components/StudentForm';
 
 interface IUseParam {
@@ -11,6 +12,8 @@ interface IUseParam {
 }
 
 function AddEditPage(): JSX.Element {
+  const history = useHistory();
+
   const { studentId } = useParams<IUseParam>();
   const isModifyMode = Boolean(studentId); // nếu tồn tại studentId thì là chỉnh sửa ngược lại tạo mới
 
@@ -29,8 +32,17 @@ function AddEditPage(): JSX.Element {
     })();
   }, [studentId]);
 
-  const handleStudentFormSubmit = (student: Student): void => {
+  const handleStudentFormSubmit = async (student: Student): Promise<void> => {
     // TODO:: handle here
+    if (isModifyMode) {
+      await apiStudent.update(student);
+      toastSuccess('Update student success');
+    } else {
+      await apiStudent.add(student);
+      toastSuccess('Create new student success');
+    }
+
+    history.push('/admin/student');
   };
 
   const initialValues: Student = {
